@@ -28,3 +28,38 @@ steps in maintaining a controlled elements:
 - state can be maintained across the multiple rerenders. state can be updated by the component itself and it will be rerendered by react itself
 - props cannot be overwritten by the child components. receiving new props can also cause component to re-render. usually when the parents state has been updated.
 - so both the satte that holds teh component and the compoennt that receives teh state as a prop will also be rendered
+
+child to parent communication:
+
+- if two sibling components have to share some data or state then it needs to be taken from the sibling components and lifted up to the nearest parent component.
+- if we want to update teh value of teh state in the child components tehn use setState() to update teh state in the parent. so everything remains in sync
+
+deleteing an item: more into shild to parent communication
+
+84. derived state
+
+- a state that id computed from an existing state or prop
+  eg:
+  const [cart,setCart]=useSTate([
+  {name: "java", price:15},
+  {name:"python, price:20},
+  ])
+  const [numItems,setNumItems]=useState(2)
+  const [totalPrice,setTotalPrice]=useState(35)
+
+- here numItems depends on number of itms in the cart and the totalPrice depends on the price of all the items in the cart.
+
+- but it is redundant to update teh numItems and the totalPrice manually.
+
+- here we need not use useState hook for numItems and the totalprice normal variables is fnie and cart could be used as the prime source of truth for both.
+
+eg:
+const [cart,setCart]=useSTate([
+{name: "java", price:15},
+{name:"python, price:20},
+])
+var sum=0
+const numItems=cart.length;
+const totalPrice=cart.reduce((acc,item)=>acc+item.price,0)
+
+- ultimately each component will be in separate file . so once developement is fixed you can just

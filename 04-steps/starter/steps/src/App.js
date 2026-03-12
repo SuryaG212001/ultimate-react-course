@@ -5,8 +5,12 @@ export default function App() {
   return (
     <div>
       <Steps />
-
-      <Steps />
+      <StepMessage step={1}>
+        <p>pass in content</p>pass in content
+      </StepMessage>
+      <StepMessage step={2}>
+        <p>read children prop</p>pass in content
+      </StepMessage>
     </div>
   );
 }
@@ -49,33 +53,56 @@ function Steps() {
             <div className={step >= 2 ? "active" : ""}>2</div>
             <div className={step >= 3 ? "active" : ""}>3</div>
           </div>
-          <p className="message">
-            Step {step}:{message[step - 1]} {test.name}
-          </p>
+          <StepMessage step={step}>{message[step - 1]}</StepMessage>
+          <Button
+            backgroundColor="#fff"
+            textColor="#333"
+            onClick={() => alert(`learn hot to ${message[step - 1]}`)}
+          >
+            learn how the child prop works
+          </Button>
 
           {/* <p className="message">hello</p> */}
           <div className="buttons">
-            <button
-              style={{ background: "#7950f2", color: "#fff" }}
-              onClick={
-                //   () => {
-                //   alert("previous");
-                // }
-                handlePrevious
-              }
+            <Button
+              backgroundColor="#7950f2"
+              textColor="#fff"
+              onClick={handlePrevious}
             >
               previous
-            </button>
-            <button
-              style={{ background: "#7950f2", color: "#fff" }}
+              <span>👈</span>
+            </Button>
+            <Button
+              backgroundColor="#7950f2"
+              textColor="#fff"
               onClick={handleNext}
             >
               next
-            </button>
+              <span>👉</span>
+            </Button>
           </div>
         </div>
       )}
     </div>
     // fragment elemnet in html
+  );
+}
+
+function StepMessage({ step, children }) {
+  return (
+    <div className="message">
+      <h3>Step {step}</h3> {children}
+    </div>
+  );
+}
+
+function Button({ backgroundColor, textColor, onClick, children }) {
+  return (
+    <button
+      style={{ backgroundColor: backgroundColor, color: textColor }}
+      onClick={onClick}
+    >
+      {children}
+    </button>
   );
 }

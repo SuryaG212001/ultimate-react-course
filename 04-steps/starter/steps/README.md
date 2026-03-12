@@ -72,3 +72,10 @@ practical guidelines about state:
 - if you want to change the way a component looks, imagine its view as a reflection of state changing over time
 - for data that should not trigger componnet re-renders, dont use state, use a regular valriable instead.
 - unnecessary rerendering causes performance issues
+
+# children prop:
+
+- it is a prop that each react component receives automatically and the value of the react component is actually what is between the opening and teh closing of teh tag of the component
+- children is a predefined keyword in reaact which will be used to identify the children prop
+- the children can receive any jsx markup . this jsx markup becomes the props.children for the component between which it is declared.
+- - it is essential ffor making reusable and configurable components
