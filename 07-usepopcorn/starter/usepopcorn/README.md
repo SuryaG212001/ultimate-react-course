@@ -59,7 +59,7 @@ huge sized components:
 
 # prop drilling:
 
-- it means to get the prop to a component sometime it has to cross many of its nearby parents to raech itself. this is called prop drilling
+- it means to get the prop to a component sometime it has to cross many of its nearby parents to reach itself. this is called prop drilling
 - because of this we end up with lot of components that will be receiving a prop which they are not using apparently.
 - to avoid this only we use component composition.
 
@@ -112,3 +112,4 @@ huge sized components:
 - they provide type of value checks the props can receive in react.
 - if we are concerned about the value type being used by react then use typescript instead of js
 - PropTypes has some validators like number , string,bool,func,array etc., it also has otehr validators like arrayOf , isRequired etc.,
+

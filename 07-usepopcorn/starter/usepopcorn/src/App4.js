@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const tempMovieData = [
   {
@@ -50,11 +50,11 @@ const tempWatchedData = [
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
-function NavBar({ children }) {
+function NavBar({ query, setQuery, children }) {
   return (
     <nav className="nav-bar">
       <Logo />
-      <Search />
+      <Search query={query} setQuery={setQuery} />
       {children}
     </nav>
   );
@@ -68,8 +68,7 @@ function Logo() {
   );
 }
 
-function Search() {
-  const [query, setQuery] = useState("");
+function Search({ query, setQuery }) {
   return (
     <input
       className="search"
@@ -83,7 +82,7 @@ function Search() {
 function NumResults({ movies }) {
   return (
     <p className="num-results">
-      Found <strong>{movies.length}</strong> results
+      Found <strong>{movies?.length}</strong> results
     </p>
   );
 }
@@ -131,7 +130,7 @@ function Main({ children }) {
 //   );
 // }
 
-function Box({ element }) {
+function Box({ error, isLoading, element }) {
   const [isOpen2, setIsOpen2] = useState(true);
 
   return (
@@ -142,9 +141,13 @@ function Box({ element }) {
       >
         {isOpen2 ? "–" : "+"}
       </button>
-      {isOpen2 && element}
+      {isOpen2 && !error && (isLoading ? <Loader /> : element)}
+      {isOpen2 && error && <ErrorMessage message={error} />}
     </div>
   );
+}
+function Loader() {
+  return <p className="loader">Loading...</p>;
 }
 
 function MovieList({ movies }) {
@@ -200,11 +203,11 @@ function WatchedSummary({ watched }) {
     </div>
   );
 }
-function watchedMoviesList({ watched }) {
+function WatchedMoviesList({ watched }) {
   return (
     <ul className="list">
       {watched.map((movie) => (
-        <WatchedMovie movie={movie} />
+        <WatchedMovie movie={movie} key={movie.imdbID} />
       ))}
     </ul>
   );
@@ -231,25 +234,93 @@ function WatchedMovie({ movie }) {
     </li>
   );
 }
+
+function ErrorMessage({ message }) {
+  return (
+    <p className="error">
+      <spn>🔴 failed to fetch</spn>
+    </p>
+  );
+}
 export default function App() {
-  const [movies, setMovies] = useState(tempMovieData);
-  const [watched, setWatched] = useState(tempWatchedData);
+  // const [movies, setMovies] = useState(tempMovieData);
+  // const [watched, setWatched] = useState(tempWatchedData);
+  const [query, setQuery] = useState("");
+  const [movies, setMovies] = useState([]);
+  const [watched, setWatched] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  // useEffect(function () {
+  //   fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=c6f9f6d0&s=interstellar`)
+  //     .then((res) => res.json())
+  //     .then((data) => setMovies(data.Search));
+  // }, []);
+
+  const tempQuery = "interstellar";
+  const key = "c6f9f6d0&s";
+  useEffect(function () {
+    async function fetchMovies() {
+      try {
+        setIsLoading((loading) => (loading = true));
+        const res = await fetch(
+          `http://www.omdbapi.com/?i=tt3896198&apikey=${key}=${tempQuery}`,
+        );
+        if (!res.ok)
+          throw new Error("Something went wrong with fetching movies");
+
+        const data = await res.json();
+        if (data === "False") throw new Error("cannot find the movie");
+        setMovies(data.Search);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setIsLoading((loading) => (loading = false));
+      }
+    }
+    fetchMovies();
+  }, []);
+
+  // fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=c6f9f6d0&s=interstellar`)
+  //   .then((res) => res.json())
+  //   .then((data) => setMovies(data.Search)); enters infinite loop
+  // setWatched([]);
+
+  useEffect(function () {
+    console.log("after initial render");
+  }, []);
+  useEffect(function () {
+    console.log("after every render");
+  });
+  console.log("during render");
+  useEffect(
+    function () {
+      console.log("after query change");
+    },
+    [query],
+  );
 
   return (
     <>
       {/* <NavBar movies={movies} /> */}
       {/* prop drilling - solution: component composition  */}
-      <NavBar>
+      <NavBar query={query} setQuery={setQuery}>
         <NumResults movies={movies} />
       </NavBar>
       <Main>
-        <Box element={<MovieList movies={movies} />}></Box>
+        <Box
+          error={error}
+          isLoading={isLoading}
+          element={<MovieList movies={movies} />}
+        ></Box>
         {/* watchedBox */}
         <Box
+          error={error}
+          isLoading={isLoading}
           element={
             <>
               <WatchedSummary watched={watched} />
-              <watchedMoviesList watched={watched} />
+              <WatchedMoviesList watched={watched} />
             </>
           }
         ></Box>
