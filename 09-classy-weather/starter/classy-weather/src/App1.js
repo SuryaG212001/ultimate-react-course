@@ -33,19 +33,21 @@ function formatDay(dateStr) {
 }
 
 class App extends React.Component {
-  constructor(props) {
-    super(props); //calling parent component React using the super() emthod
-    this.state = {
-      location: "lisbon",
-      isLoading: false,
-      displayLocation: "",
-      weather: {},
-    };
-    this.fetchWeather = this.fetchWeather.bind(this); //giving the fetchWeather method with a
-  }
-  async fetchWeather() {
-    // console.log("Loading data...");
-    // console.log(this);
+  state = {
+    location: "",
+    isLoading: false,
+    displayLocation: "",
+    weather: {},
+  };
+  //   constructor(props) {
+  //     super(props); //calling parent component React using the super() emthod
+
+  //     // this.fetchWeather = this.fetchWeather.bind(this); //giving the fetchWeather method with a
+  //   }
+  //   async fetchWeather() {
+
+  fetchWeather = async () => {
+    if (this.state.location.length < 2) return this.setState({ weather: {} });
     try {
       this.setState({ isLoading: true });
       // 1) Getting location (geocoding)
@@ -70,9 +72,26 @@ class App extends React.Component {
       const weatherData = await weatherRes.json();
       this.setState({ weather: weatherData.daily });
     } catch (err) {
-      console.err(err);
+      console.error(err);
     } finally {
       this.setState({ isLoading: false });
+    }
+  };
+
+  setLocation = (e) => this.setState({ location: e.target.value });
+
+  componentDidMount() {
+    // this.fetchWeather();
+    this.setState({ location: localStorage.getItem("location") || "" });
+  }
+  // similar to useEffect with [] mounted array.  called immediately after mount. os it is ideal to perform something right after mounting
+
+  //useEffect with the dependey array [location]
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.location !== prevState.location) {
+      this.fetchWeather();
+
+      localStorage.setItem("location", this.state.location);
     }
   }
 
@@ -80,15 +99,10 @@ class App extends React.Component {
     return (
       <div className="app">
         <h1>Classy Weather</h1>
-        <div>
-          <input
-            type="text"
-            placeholder="search for location..."
-            value={this.state.value}
-            onChange={(e) => this.setState({ location: e.target.value })}
-            // if even handler functions is not defined separately then we need not bind the this keyword.
-          />
-        </div>
+        <Input
+          location={this.state.location}
+          onChangeLocation={this.setLocation}
+        />
         <button onClick={this.fetchWeather}>Get weather</button>
 
         {this.state.isLoading && <p className="loader">Loading...</p>}
@@ -105,6 +119,9 @@ class App extends React.Component {
 export default App;
 
 class Weather extends React.Component {
+  componentWillUnmount() {
+    console.log("weather will unmount");
+  }
   render() {
     // receiving props and using them
     console.log(this.props);
@@ -145,6 +162,22 @@ class Day extends React.Component {
           {Math.floor(min)}&deg; &mdash; {Math.ceil(max)}&deg;
         </p>
       </li>
+    );
+  }
+}
+
+class Input extends React.Component {
+  render() {
+    return (
+      <div>
+        <input
+          type="text"
+          placeholder="search for location..."
+          value={this.props.value}
+          onChange={this.props.onChangeLocation}
+          // if even handler functions is not defined separately then we need not bind the this keyword.
+        />
+      </div>
     );
   }
 }

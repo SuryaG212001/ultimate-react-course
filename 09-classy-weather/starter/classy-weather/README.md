@@ -13,4 +13,10 @@
 - in function compoenents we have functions to do event handlers. in class components we have class methods for the same
 - function components return JSX from functions. whereas class components return JSX from render method.
 - in class components the effects are all distributed to all the methods rather than a single boulerplate codes. in functional components we dont have need this keyword.
-- 
+- if we dont have some sattes or we dont have to bind the this keyword with some functions then we can haev the class methods without any constructors.
+
+# life cycle methods
+- special methods that all react componentsget access to and which we can use to run side effects at different points of component life cycle.
+- mount
+- re-rendering
+- unmount
