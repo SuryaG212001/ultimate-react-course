@@ -1,70 +1,51 @@
-# Getting Started with Create React App
+# useReducer
+syntax:
+function useReducer(state,action)
+{
+    //takes current state and action  and return the next state. the action comes form the dispatch function call and teh state comes from the initial state.
+}
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+const [statevariable,dispatch_func]=useReducer(reducer_func,initial_state)
 
-## Available Scripts
+const handle(){
+    dispatch(action)
+}
 
-In the project directory, you can run:
+- action object
+eg:
+ {
+    type:"name of the action"
+    payload:value of the action
+ }
 
-### `npm start`
+advantage:
+ - all the possible sate updates can be cebtralised to one function for all the state variables adn for all the components
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+# why useReducer
+- when components have a lot of state variables and state updates, spread across many event handlers all over the component.
+- when multiple state updates need to happen at the same time (as a reaction to the event like "starting a game")
+- updating one piece of state depends on one or multiple other pieces of state
+in all these cases we can use reducer instead of useState
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+# state with useReducer
+- an alternative way of setting state, ideal for complex state and related pieces of state.
+- it takes in reducer function and an initial satte and it reduces a value to the state variable and a dispath function in an array
+eg:
+const [state,dispath]=useReducer(reducer,initialState)
+- stores related pices of  state in a state object
+- useReducer needs reducer: function containing all logic to update state. decouples state logic from component. so the reducer function is similar to the setState function
+- reducer is a pure function i.e., no side efects are allowed. it takes current state and action and returns the next state.
+- the action is simlpy an object taht defines how the object should be changed. it ususally has a type and a payload elements
+- useReducer returns a dispatch function taht triggers state updates by sending actions from event handlers to the reducer function.
 
-### `npm test`
+# how reducer state updates:
+- after executing the reducer function the function have tore-render
+![alt text](image.png)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- if we want to update states together or we have multiple states related to each other and it also includes some objects then we go for usereducer 
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+note:
+- autorename tag is an extension used to change the tags like opening and closing tags simultaneously.
+- command to install packaages :
+npm i json-server
+json-server helps to create some temporary apis and get some responses out of it
