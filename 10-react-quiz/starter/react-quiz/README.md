@@ -48,4 +48,5 @@ note:
 - autorename tag is an extension used to change the tags like opening and closing tags simultaneously.
 - command to install packaages :
 npm i json-server
+npm run server
 json-server helps to create some temporary apis and get some responses out of it
