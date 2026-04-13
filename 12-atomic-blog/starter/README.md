@@ -1,70 +1,61 @@
-# Getting Started with Create React App
+# context api:
+- in any app we will ahve the situation where we will have multiple deeply nested child components. passing props through various child compoenets is cumbersome. this prblem is called prop drilling and the solution is that better component composition.
+- but it is always not possible to have beter component composition. 
+- so instead what we need is a directly passing some variables from parent to a deeply nested child component. for this only we have context api
+- context api is used to pass data throughout the app without manually passing props down the tree.
+- it allows us to broadcast global state to the entire app. we have
+here we 3 things:
+1. provider: gives all child components access to value
+2. value:data that we want to make available(usually state and functions)
+3. consumer: all the components taht read the provided context value. we can multiple consumers.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+note: whenever context value is updated all the consumers will be rerendered. this way we can re-render the component instance as long as the component is subscribed to the context value.
 
-## Available Scripts
+# steps to implement context api
+1. create a context
+const PostContext=createContext()
 
-In the project directory, you can run:
+2. provide value to child components
+<PostContext.Provider 
+value={
+    {
+        key:value pairs
+    }
+}>
+    <>
+    // rest of the child components
+    </>
+</PostContext.Provider>
 
-### `npm start`
+3. remove the props from the child components and use this instead
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+function child_Component(){
+    const {value1}=PostContext()
+    <button onCLick={()=>value1()}>
+}
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+# state management
+- state management means giving the state a home. it also means when to use state, types of state accessibility local vs global.
 
-### `npm test`
+# types of state:
+classified based on 
+1. state accesibility
+- local state: needed only by few components. only accessible in component and child component.
+- global state: needed by many components . accessible to every coponent in the application
+2. state domain
+- remote state: all application state loaded from a remote api server. - usually asynchronous and needs re-fetching and updating.
+- ui state: everything else. usually synchronous and stored in teh application 
+eg:
+ theme, list filters , form data etc.,
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+# state placement options
+- whenever we have a new place of state we need a state first there are 6 different options in it
+1. if we want to place a local state in a local component the we will use the useSate, useReducer or useRef 
+2. if we wnat to have a piece of state in multiple component then we will uplift the state and place it in a parent component. here also we make use of the useState, usereducer or useRef
+3. not always the state comping to parent may not be the solution that is why we have global state . this uses context PAI aling with useState and useReducer. the context api is used mainly to manage the ui state and not the remote state
+4. we can manage the global state using the 3rd party library like redux, react query,swr, zustand etc.,
+5. we cna place the global state that is passed between the pages in the URL using raectrouter  
+6. sometimes we need to store some data in the users browser . this case we can store things in the local storage and teh session storage.
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+# statemanagement tools options:
+![alt text](image.png)
