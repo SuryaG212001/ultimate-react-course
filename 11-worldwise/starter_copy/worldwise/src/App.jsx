@@ -1,10 +1,13 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Product from "./Pages/product";
-import Pricing from "./Pages/Pricing";
-import Homepage from "./Pages/Homepage";
-import PageNotFound from "./Pages/PageNotFound";
-import AppLayout from "./Pages/AppLayout";
-import Login from "./Pages/Login";
+
+// lazy loading
+// import Product from "./Pages/product";
+// import Pricing from "./Pages/Pricing";
+// import Homepage from "./Pages/Homepage";
+// import PageNotFound from "./Pages/PageNotFound";
+// import AppLayout from "./Pages/AppLayout";
+// import Login from "./Pages/Login";
+
 import CityList from "./components/CityList";
 
 import CountryList from "./components/CountryList";

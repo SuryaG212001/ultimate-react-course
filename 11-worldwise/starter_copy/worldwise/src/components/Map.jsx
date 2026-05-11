@@ -89,6 +89,8 @@ function DetectClick() {
       navigate(`form?lat=${e.latlng.lat}&lng=${e.latlng.lng}`);
     },
   });
+
+  return null;
 }
 
 export default Map;

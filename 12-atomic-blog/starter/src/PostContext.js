@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useMemo,useCallback } from "react";
 import { faker } from "@faker-js/faker";
 import { useContext } from "react";
 
@@ -10,6 +10,7 @@ function createRandomPost() {
 }
 
 const PostContext = createContext();
+
 function PostProvider({ children }) {
   const [posts, setPosts] = useState(() =>
     Array.from({ length: 30 }, () => createRandomPost()),
@@ -33,16 +34,19 @@ function PostProvider({ children }) {
   function handleClearPosts() {
     setPosts([]);
   }
-
-  return (
-    <PostContext.Provider
-      value={{
+  const value=useMemo(()=>{
+    return {
         posts: searchedPosts,
         onClearPosts: handleClearPosts,
         onAddPost: handleAddPost,
         searchQuery,
         setSearchQuery,
-      }}
+      }},[searchedPosts,searchQuery,handleAddPost,handleClearPosts]);
+      
+  // if we change to dark mode the app component will re-render. so does the contextProvider and all its child.
+  return (
+    <PostContext.Provider
+      value={value}
     >
       {children}
     </PostContext.Provider>
